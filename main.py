@@ -85,24 +85,32 @@ def find_useless_resource_and_delete():
     for name in resource_file_count_map.keys():
         if resource_file_count_map[name] < 1:
             useless_resource_file_list.append(name)
+            print(name)
 
-    # 删除指定的无用的资源
-    for resource_dar in resource_dir_list:
-        for root, dirs, files in os.walk(resource_dar):
-            for f in files:
-                if f in useless_resource_file_list:
-                    re_result = re.match(delete_file_regular, f, re.I)
-                    if re_result is not None:
-                        path = os.path.join(root, f)
-                        try:
-                            os.remove(path)
-                            print(f"删除 {path} 成功")
-                        except RuntimeError:
-                            print(f"删除 {path} 失败")
+    while True:
+        is_delete = input("是否删除以上文件 (Y/N):")
+        if is_delete == "Y" or is_delete == "y":
+            # 删除指定的无用的资源
+            for resource_dar in resource_dir_list:
+                for root, dirs, files in os.walk(resource_dar):
+                    for f in files:
+                        if f in useless_resource_file_list:
+                            re_result = re.match(delete_file_regular, f, re.I)
+                            if re_result is not None:
+                                path = os.path.join(root, f)
+                                try:
+                                    os.remove(path)
+                                    print(f"删除 {path} 成功")
+                                except RuntimeError:
+                                    print(f"删除 {path} 失败")
+            return
+        elif is_delete == "N" or is_delete == "n":
+            return
+        else:
+            print("请输入Y(同意)或者N(不同意)")
 
 
 if __name__ == '__main__':
-
     # 优化资源定义文件, 删除无用的资源定义
     enhance_resource_define_file()
 
@@ -110,7 +118,3 @@ if __name__ == '__main__':
     find_useless_resource_and_delete()
 
     print("\n运行完成")
-
-
-
-
