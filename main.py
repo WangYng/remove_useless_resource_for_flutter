@@ -143,7 +143,7 @@ def find_useless_resource_and_delete():
     for resource_dir in resource_dir_list:
         for root, dirs, files in os.walk(resource_dir):
             for file in files:
-                if str(file) != 'main.dart':
+                if str(file) != 'main.dart' and not bool(re.search(r'\d', str(file))):
                     resource_file_list.append(file)
                     resource_file_count_map[file] = 0
     resource_file_list = list(set(resource_file_list))
