@@ -143,7 +143,7 @@ def find_useless_resource_and_delete():
     for resource_dir in resource_dir_list:
         for root, dirs, files in os.walk(resource_dir):
             for file in files:
-                if str(file) != 'main.dart' and not bool(re.search(r'\d', str(file))):
+                if str(file) != 'main.dart':
                     resource_file_list.append(file)
                     resource_file_count_map[file] = 0
     resource_file_list = list(set(resource_file_list))
@@ -157,7 +157,9 @@ def find_useless_resource_and_delete():
             with open(path) as file_obj:
                 file_content = file_obj.read()
                 for resource_file in resource_file_list:
-                    find_count = file_content.count(resource_file)
+                    # 只取英文字符部分进行搜索对比
+                    file_name = re.findall(r'([a-zA-Z-_]*)', resource_file)[0]
+                    find_count = file_content.count(file_name)
                     if find_count != 0:
                         count = resource_file_count_map[resource_file]
                         resource_file_count_map[resource_file] = count + find_count
